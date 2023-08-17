@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib
 import requests
-
+from collections import defaultdict
 
 api_key = "RGAPI-e1e8622d-c3d8-4599-80d4-9a9e842416e3"
 userName = "Sheng777"
@@ -33,6 +33,8 @@ recent_win = 0
 recent_lose = 0
 streak = 0
 on_streak = True
+win_against = defaultdict(int)
+lose_against = defaultdict(int)
 
 for matchId in matches_id:
     api_url_matchInfo = "https://americas.api.riotgames.com/lol/match/v5/matches/"+matchId+"?api_key="+api_key
@@ -47,6 +49,12 @@ for matchId in matches_id:
     
     for i in range(len(participants)):
         #break    
+        
+        if (i == 0):
+            print("Team Blue:")
+        elif (i == 5):
+            print("Team Red:")
+        
         summonerName = participants[i]["summonerName"]
         champion = participants[i]["championName"]
         kills = participants[i]["kills"]
@@ -62,6 +70,13 @@ for matchId in matches_id:
                         streak += 1
                     else:
                         on_streak = False
+                
+                if (i < 5):
+                    for j in range(5,len(participants)):
+                        win_against[participants[j]["championName"]] += 1
+                else:
+                    for j in range(5):
+                        win_against[participants[j]["championName"]] += 1
                     
                     
             else:
@@ -71,6 +86,14 @@ for matchId in matches_id:
                         streak -=1
                     else:
                         on_streak = False
+                
+                if (i < 5):
+                    for j in range(5,len(participants)):
+                        lose_against[participants[j]["championName"]] += 1
+                else:
+                    for j in range(5):
+                        lose_against[participants[j]["championName"]] += 1
+                    
         
         print(f"    summoner name: {summonerName} | champions: {champion} | kills: {kills} | deaths: {deaths} | assists: {assists} | win: {win}")
     
@@ -83,3 +106,13 @@ print("Summary:")
 print(f"recent streak: {streak}")
 print(f"recent win: {recent_win}")
 print(f"recent lose: {recent_lose}")
+
+print("win against:")
+win_against = {k:v for k, v in reversed(sorted(win_against.items(),key=lambda item: item[1]))}
+for k in win_against.keys():
+    print(f"    {k} : {win_against[k]}")
+    
+print("lose against:")
+lose_against = {k:v for k, v in reversed(sorted(lose_against.items(),key=lambda item: item[1]))}
+for k in lose_against.keys():
+    print(f"    {k} : {lose_against[k]}")
