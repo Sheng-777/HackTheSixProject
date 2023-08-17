@@ -4,7 +4,7 @@ import requests
 from collections import defaultdict
 
 api_key = "RGAPI-e1e8622d-c3d8-4599-80d4-9a9e842416e3"
-userName = "Sheng777"
+userName = "LimeLemming420"
 
 # Get player Info
 api_url_playerInfo = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+userName + '?api_key=' + api_key
@@ -101,18 +101,31 @@ for matchId in matches_id:
     #break
     print("--------------------------------")
 
-print("Summary:")
+print(f"{userName} Summary:")
 
 print(f"recent streak: {streak}")
 print(f"recent win: {recent_win}")
 print(f"recent lose: {recent_lose}")
 
-print("win against:")
+
+print("Top 3 Win against:")
+maxGame = 3
+currGame = 0
+
 win_against = {k:v for k, v in reversed(sorted(win_against.items(),key=lambda item: item[1]))}
 for k in win_against.keys():
-    print(f"    {k} : {win_against[k]}")
-    
-print("lose against:")
+    if currGame >= maxGame:
+        break 
+    print(f"    {k} : {win_against[k]}", end="")
+    currGame += 1
+print()    
+
+print("Top 3 lose against:")
+currGame = 0
 lose_against = {k:v for k, v in reversed(sorted(lose_against.items(),key=lambda item: item[1]))}
 for k in lose_against.keys():
-    print(f"    {k} : {lose_against[k]}")
+    if currGame >= maxGame:
+        break
+    print(f"    {k} : {lose_against[k]}", end="")
+    currGame += 1
+print()
