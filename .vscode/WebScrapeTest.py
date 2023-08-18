@@ -4,7 +4,7 @@ import requests
 from collections import defaultdict
 
 api_key = "RGAPI-e1e8622d-c3d8-4599-80d4-9a9e842416e3"
-userName = "LimeLemming420"
+userName = "Sheng777"
 
 # Get player Info
 api_url_playerInfo = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+userName + '?api_key=' + api_key
