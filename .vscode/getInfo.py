@@ -19,6 +19,9 @@ def InfoGet(userName,region, gameCount):
     # print(req_playerInfo)
     player_info = req_playerInfo.json()
     #print(player_info)
+    
+    if player_info["status"]["status_code"] == 404:
+        return "User Not Found"
 
     player_account_id = player_info["accountId"]
     player_name = player_info["name"]
@@ -172,5 +175,5 @@ def InfoGet(userName,region, gameCount):
     
     return playerSummary
 
-x = InfoGet("Sheng777","NA",10)
+x = InfoGet("_ - ","NA",10)
 print(x)

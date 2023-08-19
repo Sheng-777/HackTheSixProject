@@ -11,7 +11,7 @@ class MyGUI(QMainWindow):
         #width, height = screen_resolution.width(), screen_resolution.height()
         
         #self.setGeometry(int(width/2 - WinW/2), int(height/2 - WinH/2))
-        #self.setWindowTitle("ADCDIFF.gg")
+        self.setWindowTitle("ADCDIFF.gg")
         #self.setToolTip("ADCdiff.gg")
         self.show()
         self.go.clicked.connect(self.clicked)
