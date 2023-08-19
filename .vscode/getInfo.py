@@ -209,7 +209,7 @@ def generateComment(playerSummary):
                 break
             
             for k in playerSummary["winAgainst"].keys():
-                comment = comment + "He is doing well against " + k + " beating it " + str(playerSummary["winAgainst"][k]) + " times. "
+                comment = comment + " He is doing well against " + k + " beating it " + str(playerSummary["winAgainst"][k]) + " times. "
                 break
             break
     
