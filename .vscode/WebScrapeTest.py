@@ -1,9 +1,10 @@
 from bs4 import BeautifulSoup
 import urllib
+
 import requests
 from collections import defaultdict
 
-api_key = "RGAPI-e1e8622d-c3d8-4599-80d4-9a9e842416e3"
+api_key = "RGAPI-10be0019-40b3-4b85-9293-c76c46a48470"
 userName = "Sheng777"
 
 # Get player Info
@@ -12,7 +13,7 @@ api_url_playerInfo = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by
 req_playerInfo = requests.get(api_url_playerInfo)
 # print(req_playerInfo)
 player_info = req_playerInfo.json()
-# print(player_info)
+#print(player_info)
 
 player_account_id = player_info["accountId"]
 player_name = player_info["name"]
