@@ -8,7 +8,7 @@ from pathlib import Path
 class MyGUI(QMainWindow):
     def __init__(self):
         super(MyGUI, self).__init__()
-        p = os.path.abspath("HackTheSixProject/adcdiffgg.ui")
+        p = Path("adcdiffgg.ui").resolve()
         uic.loadUi(str(p),self)
         #uic.loadUi(r"C:\Users\alexj\OneDrive\Documents\GitHub\HackTheSixProject\adcdiffgg.ui", self)
         #uic.loadUi("adcdiffgg.ui", self)
@@ -19,18 +19,16 @@ class MyGUI(QMainWindow):
         self.setWindowTitle("ADCDIFF.gg")
         self.setToolTip("ADCdiff.gg")
         
-        # creating label
+        # create logo image
         self.label = QLabel(self)
-         
         # loading image
-        p = os.path.abspath("HackTheSixProject/adcdifflogo.png")
+        p = os.path.abspath("adcdifflogo.png")
         self.pixmap = QPixmap(str(p))
         #self.pixmap = QPixmap(r'C:\Users\alexj\OneDrive\Documents\GitHub\HackTheSixProject\adcdifflogo.png')
-        self.pixmap = self.pixmap.scaled(400,200)
         #self.pixmap = QPixmap('adcdifflogo.png')
+        self.pixmap = self.pixmap.scaled(400,200)
         # adding image to label
         self.label.setPixmap(self.pixmap)
- 
         # Optional, resize label to image size
         self.label.resize(self.pixmap.width(),
                           self.pixmap.height())
