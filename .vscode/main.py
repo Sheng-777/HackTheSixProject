@@ -1,12 +1,16 @@
 import sys
+import os
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPalette, QColor, QFont, QPixmap
+from pathlib import Path
 
 class MyGUI(QMainWindow):
     def __init__(self):
         super(MyGUI, self).__init__()
-        uic.loadUi(r"C:\Users\alexj\OneDrive\Documents\GitHub\HackTheSixProject\adcdiffgg.ui", self)
+        p = os.path.abspath("HackTheSixProject/adcdiffgg.ui")
+        uic.loadUi(str(p),self)
+        #uic.loadUi(r"C:\Users\alexj\OneDrive\Documents\GitHub\HackTheSixProject\adcdiffgg.ui", self)
         #uic.loadUi("adcdiffgg.ui", self)
         #screen_resolution = application.desktop().screenGeometry()
         #width, height = screen_resolution.width(), screen_resolution.height()
@@ -19,8 +23,10 @@ class MyGUI(QMainWindow):
         self.label = QLabel(self)
          
         # loading image
-        self.pixmap = QPixmap(r'C:\Users\alexj\OneDrive\Documents\GitHub\HackTheSixProject\adcdifflogo.png')
- 
+        p = os.path.abspath("HackTheSixProject/adcdifflogo.png")
+        self.pixmap = QPixmap(str(p))
+        #self.pixmap = QPixmap(r'C:\Users\alexj\OneDrive\Documents\GitHub\HackTheSixProject\adcdifflogo.png')
+        self.pixmap = self.pixmap.scaled(400,200)
         #self.pixmap = QPixmap('adcdifflogo.png')
         # adding image to label
         self.label.setPixmap(self.pixmap)
