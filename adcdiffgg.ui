@@ -11,13 +11,25 @@
    </rect>
   </property>
   <property name="cursor">
-   <cursorShape>OpenHandCursor</cursorShape>
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-color:rgb(255, 226, 190)</string>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QComboBox" name="enterReg">
@@ -169,6 +181,9 @@
      <string notr="true">background-color : rgb(255, 255, 255);
 font: 12pt &quot;Bodoni MT&quot;;</string>
     </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
     <item>
      <property name="text">
       <string>NA</string>
@@ -211,6 +226,15 @@ font: 12pt &quot;Bodoni MT&quot;;</string>
      </font>
     </property>
     <property name="text">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>32766</number>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
      <string>Enter Summoner...</string>
     </property>
    </widget>
@@ -255,30 +279,17 @@ font: 12pt &quot;Bodoni MT&quot;;</string>
       <height>41</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>OpenHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">font: 12pt &quot;Bodoni MT&quot;;</string>
     </property>
     <property name="text">
      <string>GO</string>
     </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>0</y>
-      <width>391</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>../../Users/alexj/Downloads/adcdifflogo.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
+    <property name="autoDefault">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
