@@ -7,20 +7,20 @@ import sys
 from championInfo import getChamp
 
 api_key = "RGAPI-10be0019-40b3-4b85-9293-c76c46a48470"
-regionTranslate = {"NA":"na1", "EUW":"euw1", "EUNE" : "eun1", "KR":"kr","OCE":"oc1"}
+regionTranslate = {"NA":["na1", "americas"], "EUW":["euw1","europe"], "EUNE" : ["eun1", "europe"], "KR":["kr", "asia"],"OCE":["oc1","sea"]}
 
 
 def InfoGet(userName,region, gameCount):
     # Get player Info
-    region = regionTranslate[region]
-    api_url_playerInfo = "https://"+region+".api.riotgames.com/lol/summoner/v4/summoners/by-name/"+userName + '?api_key=' + api_key
+    r = regionTranslate[region][0]
+    api_url_playerInfo = "https://"+r+".api.riotgames.com/lol/summoner/v4/summoners/by-name/"+userName + '?api_key=' + api_key
 
     req_playerInfo = requests.get(api_url_playerInfo)
     # print(req_playerInfo)
     player_info = req_playerInfo.json()
     #print(player_info)
     
-    if player_info["status"]["status_code"] == 404:
+    if "status" in player_info.keys():
         return "User Not Found"
 
     player_account_id = player_info["accountId"]
@@ -32,7 +32,7 @@ def InfoGet(userName,region, gameCount):
     # print(f"player name: {player_name} \nplayer level: {player_lvl} \npuuid: {player_puuid}")
 
     # Get matchId
-    api_url_matchesId = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/"+player_puuid+"/ids?start=0&count="+str(gameCount)+"&api_key="+api_key
+    api_url_matchesId = "https://"+regionTranslate[region][1] +".api.riotgames.com/lol/match/v5/matches/by-puuid/"+player_puuid+"/ids?start=0&count="+str(gameCount)+"&api_key="+api_key
     req_matchesId = requests.get(api_url_matchesId)
     matches_id = req_matchesId.json()
     # print(matches_id)
@@ -53,7 +53,7 @@ def InfoGet(userName,region, gameCount):
     
     #iterate over each math
     for matchId in matches_id:
-        api_url_matchInfo = "https://americas.api.riotgames.com/lol/match/v5/matches/"+matchId+"?api_key="+api_key
+        api_url_matchInfo = "https://"+ regionTranslate[region][1]+".api.riotgames.com/lol/match/v5/matches/"+matchId+"?api_key="+api_key
         req_matchInfo = requests.get(api_url_matchInfo)
         matchInfo = req_matchInfo.json()
         #print(matchInfo["info"]["teams"][9//5]["bans"][9 % 5])
@@ -162,7 +162,7 @@ def InfoGet(userName,region, gameCount):
     print("Top Bans")
     currGame = 0
     commonBans = {k:v for k, v in reversed(sorted(commonBans.items(),key=lambda item: item[1]))}
-    print(commonBans)
+    #print(commonBans)
     for k in commonBans.keys():
         if currGame >= maxGame:
             break
@@ -171,9 +171,52 @@ def InfoGet(userName,region, gameCount):
     print()
     
     winPercentage = recent_win / gameCount
-    playerSummary = [player_name,recent_win,recent_lose,streak,winPercentage,win_against,lose_against,commonBans,matchHistory]
-    
+    playerSummary = {"playerName" : player_name, 
+                     "recentWin" : recent_win, 
+                     "recentLose" : recent_lose, 
+                     "streak" : streak, 
+                     "winPercentage" : winPercentage, 
+                     "winAgainst":win_against,
+                     "loseAgainst" : lose_against,
+                     "commonBans" : commonBans,
+                     "matchHistory" : matchHistory,
+                     "gameCount" : gameCount 
+                     }
+
+    playerSummary["comment"] = generateComment(playerSummary=playerSummary)
     return playerSummary
 
-x = InfoGet("_ - ","NA",10)
-print(x)
+def generateComment(playerSummary):
+
+    comment = ""
+    
+    comment = comment + playerSummary["playerName"] + " is doing"
+    
+    performance = [(0.25,"terrible","only"), (0.45, "poorly","only"), (0.50,"fine",""), (0.55, "well","a whopping amount of"), (1.00,"fantastic")]
+    for i in range(len(performance)):
+        #print(playerSummary["winPercentage"])
+        if (playerSummary["winPercentage"] < performance[i][0]):
+            comment = comment + " " + performance[i][1] + ". " + "Winning " + performance[i][2] + " " + str(playerSummary["recentWin" ]) + " out of his last " + str(playerSummary["gameCount"]) + " games and is on a" + " " + str(abs(playerSummary["streak"])) + " game"
+            if (playerSummary["streak"] < 0):
+                comment = comment + " lose streak."
+            else:
+                comment = comment + " win streak."
+                
+            comment = comment + " His greatest enemy is "
+            
+            for k in playerSummary["loseAgainst"].keys():
+                comment = comment + k + " losing to it " + str(playerSummary["loseAgainst"][k]) + " times. So avoid talking about the strength of that champion."
+                break
+            
+            for k in playerSummary["winAgainst"].keys():
+                comment = comment + " He is doing well against " + k + " beating it " + str(playerSummary["winAgainst"][k]) + " times. "
+                break
+            break
+    
+
+    
+    print(comment)
+    return comment
+
+x = InfoGet("Hide on bush","KR",10)
+#print(x)
