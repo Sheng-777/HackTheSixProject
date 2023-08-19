@@ -30,10 +30,10 @@ class MyGUI(QMainWindow):
                           self.pixmap.height())
         self.label.move(300,0)       
         self.show()
-        self.enterSumm.returnPressed.connect(self.enter)
-        self.go.clicked.connect(self.clicked)
+        self.enterSumm.returnPressed.connect(self.search)
+        self.go.clicked.connect(self.search)
 
-    def clicked(self):
+    def search(self):
         summText = self.enterSumm.text()
         region = self.enterReg.currentText()
         if summText == "":
@@ -44,12 +44,6 @@ class MyGUI(QMainWindow):
         else:
             print('Summoner name: ' + summText)
             print('Region: ' + region)
-        
-    def enter(self):
-        summText = self.enterSumm.text()
-        region = self.enterReg.currentText()
-        print('Summoner name: ' + summText)
-        print('Region: ' + region)
         
 def main():
     app = QApplication([])
