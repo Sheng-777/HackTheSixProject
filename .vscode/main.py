@@ -29,12 +29,10 @@ class MyGUI(QMainWindow):
             print('Summoner name: ' + summText)
             print('Region: ' + region)
         
-    btn_save = QtWidgets.QPushButton(win)
-    btn_save.setText('Go')
-    btn_save.clicked.connect(clicked)
-    btn_save.move(200,130)
-    
-    win.show()
-    sys.exit(app.exec_())
-    
-window()
+def main():
+    app = QApplication([])
+    window = MyGUI()
+    app.exec_()
+   
+if __name__ == '__main__':
+    main()
