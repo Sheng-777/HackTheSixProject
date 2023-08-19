@@ -16,12 +16,15 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QComboBox" name="enterReg">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>120</y>
+      <y>270</y>
       <width>121</width>
       <height>41</height>
      </rect>
@@ -196,7 +199,7 @@ font: 12pt &quot;Bodoni MT&quot;;</string>
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>120</y>
+      <y>270</y>
       <width>631</width>
       <height>41</height>
      </rect>
@@ -215,7 +218,7 @@ font: 12pt &quot;Bodoni MT&quot;;</string>
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>100</y>
+      <y>250</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -231,7 +234,7 @@ font: 12pt &quot;Bodoni MT&quot;;</string>
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>100</y>
+      <y>250</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -247,7 +250,7 @@ font: 12pt &quot;Bodoni MT&quot;;</string>
     <property name="geometry">
      <rect>
       <x>830</x>
-      <y>120</y>
+      <y>270</y>
       <width>101</width>
       <height>41</height>
      </rect>
@@ -257,6 +260,25 @@ font: 12pt &quot;Bodoni MT&quot;;</string>
     </property>
     <property name="text">
      <string>GO</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>0</y>
+      <width>391</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../Users/alexj/Downloads/adcdifflogo.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
