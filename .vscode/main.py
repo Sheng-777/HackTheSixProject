@@ -29,6 +29,8 @@ class MyGUI(QMainWindow):
         self.label.resize(self.pixmap.width(),
                           self.pixmap.height())
         self.label.move(300,20)       
+        self.setWindowTitle("ADCDIFF.gg")
+        #self.setToolTip("ADCdiff.gg")
         self.show()
         self.go.clicked.connect(self.clicked)
 

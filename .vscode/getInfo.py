@@ -19,6 +19,9 @@ def InfoGet(userName,region, gameCount):
     # print(req_playerInfo)
     player_info = req_playerInfo.json()
     #print(player_info)
+    
+    if player_info["status"]["status_code"] == 404:
+        return "User Not Found"
 
     player_account_id = player_info["accountId"]
     player_name = player_info["name"]
@@ -44,8 +47,9 @@ def InfoGet(userName,region, gameCount):
     avgKDA = 0
     avgCSperMin = 0
     commonBans = defaultdict(int)
-    winPercentage = recent_win / gameCount
+    winPercentage = 0
 
+    matchHistory = []
     
     #iterate over each math
     for matchId in matches_id:
@@ -54,11 +58,13 @@ def InfoGet(userName,region, gameCount):
         matchInfo = req_matchInfo.json()
         #print(matchInfo["info"]["teams"][9//5]["bans"][9 % 5])
         #sys.exit()
-
+        matchDetail = []
+        
         participants = matchInfo["info"]["participants"]
         #print(participants)
         teams = ["Red","Blue"]
         winTeam = teams[int(participants[0]["win"])]
+        matchDetail.append(winTeam)
         print("Winner: " + winTeam)
         for i in range(len(participants)):
             
@@ -77,6 +83,9 @@ def InfoGet(userName,region, gameCount):
             assists = participants[i]["assists"]
             win = participants[i]["win"]
             csPerMinute = round((participants[i]["totalMinionsKilled"] + participants[i]["neutralMinionsKilled"]) / ((participants[i]["timePlayed"] / 60)), 1)
+            
+            matchDetail.append([summonerName,champion,kills,deaths,assists,csPerMinute])
+            
             
             if summonerName == player_name:
                 if win:
@@ -118,6 +127,7 @@ def InfoGet(userName,region, gameCount):
         
         
         #break
+        matchHistory.append(matchDetail)
         print("--------------------------------")
 
     print(f"{userName} Summary:")
@@ -159,5 +169,11 @@ def InfoGet(userName,region, gameCount):
         print(f"    {k} : {commonBans[k]}", end="")
         currGame += 1
     print()
+    
+    winPercentage = recent_win / gameCount
+    playerSummary = [player_name,recent_win,recent_lose,streak,winPercentage,win_against,lose_against,commonBans,matchHistory]
+    
+    return playerSummary
 
-InfoGet("Sheng777","NA",10)
+x = InfoGet("_ - ","NA",10)
+print(x)
