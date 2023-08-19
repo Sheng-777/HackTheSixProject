@@ -3,9 +3,12 @@ import urllib
 import math
 import requests
 from collections import defaultdict
+import sys
+from championInfo import getChamp
 
 api_key = "RGAPI-10be0019-40b3-4b85-9293-c76c46a48470"
 regionTranslate = {"NA":"na1", "EUW":"euw1", "EUNE" : "eun1", "KR":"kr","OCE":"oc1"}
+
 
 def InfoGet(userName,region, gameCount):
     # Get player Info
@@ -31,19 +34,26 @@ def InfoGet(userName,region, gameCount):
     matches_id = req_matchesId.json()
     # print(matches_id)
 
-    # get detail match info
+    # get matches info
     recent_win = 0
     recent_lose = 0
     streak = 0
     on_streak = True
     win_against = defaultdict(int)
     lose_against = defaultdict(int)
+    avgKDA = 0
+    avgCSperMin = 0
+    commonBans = defaultdict(int)
+    winPercentage = recent_win / gameCount
 
+    
+    #iterate over each math
     for matchId in matches_id:
         api_url_matchInfo = "https://americas.api.riotgames.com/lol/match/v5/matches/"+matchId+"?api_key="+api_key
         req_matchInfo = requests.get(api_url_matchInfo)
         matchInfo = req_matchInfo.json()
-        #print(matchInfo["info"]["teams"][0])
+        #print(matchInfo["info"]["teams"][9//5]["bans"][9 % 5])
+        #sys.exit()
 
         participants = matchInfo["info"]["participants"]
         #print(participants)
@@ -99,8 +109,11 @@ def InfoGet(userName,region, gameCount):
                     else:
                         for j in range(5):
                             lose_against[participants[j]["championName"]] += 1
-                        
-            
+                 
+                try:       
+                    commonBans[getChamp(matchInfo["info"]["teams"][i//5]["bans"][i % 5]["championId"])] += 1
+                except:
+                    pass
             print(f"    summoner name: {summonerName} | champions: {champion} | kills: {kills} | deaths: {deaths} | assists: {assists} | cs/m: {csPerMinute}| win: {win}")
         
         
@@ -112,8 +125,7 @@ def InfoGet(userName,region, gameCount):
     print(f"recent streak: {streak}")
     print(f"recent win: {recent_win}")
     print(f"recent lose: {recent_lose}")
-    winPercentage = recent_win / gameCount
-
+    
 
     print("Top 3 Win against:")
     maxGame = 3
@@ -137,5 +149,15 @@ def InfoGet(userName,region, gameCount):
         currGame += 1
     print()
     
+    print("Top Bans")
+    currGame = 0
+    commonBans = {k:v for k, v in reversed(sorted(commonBans.items(),key=lambda item: item[1]))}
+    print(commonBans)
+    for k in commonBans.keys():
+        if currGame >= maxGame:
+            break
+        print(f"    {k} : {commonBans[k]}", end="")
+        currGame += 1
+    print()
 
 InfoGet("Sheng777","NA",10)
