@@ -42,6 +42,8 @@ class MyGUI(QMainWindow):
         self.pastResult.adjustSize()
         
         self.show()
+        self.getPast()
+        
         self.enterSumm.returnPressed.connect(self.searchSumm)
         self.go.clicked.connect(self.searchSumm)
 
@@ -65,20 +67,59 @@ class MyGUI(QMainWindow):
                 self.enterSumm.clear()
                 pass
             
-            elif playerSummary not in self.players:
+            elif playerSummary not in self.players[-3:]:
                 playerInfo = QLabel(self)
                 print("hi")
                 playerInfo.setWordWrap(True)
                 playerInfo.move(40,360+(130*(len(self.players)%3)))
                 playerInfo.setFixedWidth(900)
                 playerInfo.setFont(QFont("Bodoni MT",10))
-                playerInfo.setText(f"{len(self.players) %3 + 1}. Summoner Name: {playerSummary['playerName']} | Win%: {playerSummary['winPercentage'] * 100}% | W/L : {playerSummary['recentWin']} / {playerSummary['recentLose']} \nComment: {playerSummary['comment']}")
+                playerInfo.setText(f"Summoner Name: {playerSummary['playerName']} | Win%: {playerSummary['winPercentage'] * 100}% | W/L : {playerSummary['recentWin']} / {playerSummary['recentLose']} \nComment: {playerSummary['comment']}")
                 playerInfo.adjustSize()
+                playerInfo.setStyleSheet("border : 1px solid black;")
                 self.players.append(playerSummary)
+                
+                f = open(Path("pastHistory.txt"),"a")
+                f.write(f"{playerInfo.text()}")
+                f.write(f"\n{str(playerSummary)}\n")
+                
+                if(len(self.players) > 6):
+                    self.players.pop(0)
+                    self.players.pop(0)
+                    self.players.pop(0)
+                
                 playerInfo.show()
                 self.enterSumm.clear()
                   
 
+    def getPast(self):
+        f = open(Path("pastHistory.txt"),"r")
+        lines = 0
+        s = ""
+        num = 0
+        for x in f.readlines()[-9:]:
+            lines+= 1
+            
+            if lines == 1:
+                self.players.append(x)     
+                s = s + x       
+            
+            elif lines == 2:
+                s = s + x.replace('\n','')
+
+            elif lines == 3:
+                lines = 0
+                playerInfo = QLabel(self)
+                playerInfo.setWordWrap(True)
+                playerInfo.move(40,360+num*130)
+                playerInfo.setFixedWidth(900)
+                playerInfo.setFont(QFont("Bodoni MT",10))
+                playerInfo.setText(s)
+                playerInfo.adjustSize()
+                playerInfo.setStyleSheet("border : 1px solid black;")                
+                playerInfo.show() 
+                s = ""
+                num += 1       
             
         
 def main():
