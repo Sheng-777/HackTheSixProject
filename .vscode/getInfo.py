@@ -45,6 +45,7 @@ def InfoGet(userName,region, gameCount):
     win_against = defaultdict(int)
     lose_against = defaultdict(int)
     avgKDA = 0
+    totalKDA = 0
     avgCSperMin = 0
     commonBans = defaultdict(int)
     winPercentage = 0
@@ -91,6 +92,9 @@ def InfoGet(userName,region, gameCount):
             
             
             if summonerName == player_name:
+                
+                totalKDA += (kills + assists) / deaths
+                
                 if win:
                     recent_win += 1
                     if on_streak:
@@ -144,33 +148,15 @@ def InfoGet(userName,region, gameCount):
     currGame = 0
 
     win_against = {k:v for k, v in reversed(sorted(win_against.items(),key=lambda item: item[1]))}
-    for k in win_against.keys():
-        if currGame >= maxGame:
-            break 
-        #print(f"    {k} : {win_against[k]}", end="")
-        currGame += 1
-    #print()    
-
     #print("Top 3 lose against:")
     currGame = 0
     lose_against = {k:v for k, v in reversed(sorted(lose_against.items(),key=lambda item: item[1]))}
-    for k in lose_against.keys():
-        if currGame >= maxGame:
-            break
-        #print(f"    {k} : {lose_against[k]}", end="")
-        currGame += 1
-    #print()
+
     
     #print("Top Bans")
     currGame = 0
     commonBans = {k:v for k, v in reversed(sorted(commonBans.items(),key=lambda item: item[1]))}
-    #print(commonBans)
-    for k in commonBans.keys():
-        if currGame >= maxGame:
-            break
-        #print(f"    {k} : {commonBans[k]}", end="")
-        currGame += 1
-    #print()
+    avgKDA = round(totalKDA / gameCount,1)
     
     winPercentage = recent_win / gameCount
     playerSummary = {"playerName" : player_name, 
@@ -183,7 +169,8 @@ def InfoGet(userName,region, gameCount):
                      "commonBans" : commonBans,
                      "matchHistory" : matchHistory,
                      "gameCount" : gameCount, 
-                     "comment" : ""
+                     "comment" : "",
+                     "kda" : avgKDA,
                      }
 
     playerSummary["comment"] = generateComment(playerSummary=playerSummary)
