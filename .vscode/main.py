@@ -3,6 +3,7 @@ import os
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPalette, QColor, QFont, QPixmap
+from PyQt5.QtCore import QBasicTimer
 from pathlib import Path
 from getInfo import InfoGet
 
@@ -46,6 +47,24 @@ class MyGUI(QMainWindow):
         
         self.enterSumm.returnPressed.connect(self.searchSumm)
         self.go.clicked.connect(self.searchSumm)
+        
+        self.pbar = QProgressBar(self)
+        self.pbar.setGeometry(100, 750, 800, 10)
+        self.pbar.hide()
+
+        self.timer = QBasicTimer()
+        self.step = 0
+        
+        self.show()
+
+    def timerEvent(self, e):
+
+        if self.step >= 100:
+            self.timer.stop()
+            return
+
+        self.step = self.step + 1
+        self.pbar.setValue(self.step)
 
     def searchSumm(self):
         summText = self.enterSumm.text()
@@ -59,7 +78,9 @@ class MyGUI(QMainWindow):
         else:
             print('Summoner name: ' + summText)
             print('Region: ' + region)
-            
+            self.pbar.show()
+            self.timer.start(100, self)
+        
             
             playerSummary = InfoGet(summText,region,10)
             
