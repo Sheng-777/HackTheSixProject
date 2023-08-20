@@ -47,7 +47,7 @@ class MyGUI(QMainWindow):
         self.go.clicked.connect(self.searchSumm)
         
         self.pbar = QProgressBar(self)
-        self.pbar.setGeometry(100, 650, 900, 10)
+        self.pbar.setGeometry(100, 750, 800, 10)
         self.pbar.hide()
 
         self.timer = QBasicTimer()
@@ -76,7 +76,7 @@ class MyGUI(QMainWindow):
         else:
             print('Summoner name: ' + summText)
             print('Region: ' + region)
-                self.pbar.show()
+            self.pbar.show()
             self.timer.start(100, self)
         
             
