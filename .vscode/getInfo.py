@@ -6,7 +6,7 @@ from collections import defaultdict
 import sys
 from championInfo import getChamp
 
-api_key = "RGAPI-10be0019-40b3-4b85-9293-c76c46a48470"
+api_key = "RGAPI-76859c66-d7b4-4559-9cd8-054fab1a482e"
 regionTranslate = {"NA":["na1", "americas"], "EUW":["euw1","europe"], "EUNE" : ["eun1", "europe"], "KR":["kr", "asia"],"OCE":["oc1","sea"]}
 
 
@@ -56,6 +56,7 @@ def InfoGet(userName,region, gameCount):
         api_url_matchInfo = "https://"+ regionTranslate[region][1]+".api.riotgames.com/lol/match/v5/matches/"+matchId+"?api_key="+api_key
         req_matchInfo = requests.get(api_url_matchInfo)
         matchInfo = req_matchInfo.json()
+        #print(matchInfo)
         #print(matchInfo["info"]["teams"][9//5]["bans"][9 % 5])
         #sys.exit()
         matchDetail = []
@@ -65,13 +66,15 @@ def InfoGet(userName,region, gameCount):
         teams = ["Red","Blue"]
         winTeam = teams[int(participants[0]["win"])]
         matchDetail.append(winTeam)
-        print("Winner: " + winTeam)
+        #print("Winner: " + winTeam)
         for i in range(len(participants)):
             
             if (i == 0):
-                print("Team Blue:")
+                #print("Team Blue:")
+                pass
             elif (i == 5):
-                print("Team Red:")
+                #print("Team Red:")
+                pass
             
             #print(participants[i])
             #break
@@ -123,21 +126,20 @@ def InfoGet(userName,region, gameCount):
                     commonBans[getChamp(matchInfo["info"]["teams"][i//5]["bans"][i % 5]["championId"])] += 1
                 except:
                     pass
-            print(f"    summoner name: {summonerName} | champions: {champion} | kills: {kills} | deaths: {deaths} | assists: {assists} | cs/m: {csPerMinute}| win: {win}")
+            #print(f"    summoner name: {summonerName} | champions: {champion} | kills: {kills} | deaths: {deaths} | assists: {assists} | cs/m: {csPerMinute}| win: {win}")
         
         
         #break
         matchHistory.append(matchDetail)
-        print("--------------------------------")
+        #print("--------------------------------")
 
-    print(f"{userName} Summary:")
-
-    print(f"recent streak: {streak}")
-    print(f"recent win: {recent_win}")
-    print(f"recent lose: {recent_lose}")
+    #print(f"{userName} Summary:")
+    #print(f"recent streak: {streak}")
+    #print(f"recent win: {recent_win}")
+    #print(f"recent lose: {recent_lose}")
     
 
-    print("Top 3 Win against:")
+    #print("Top 3 Win against:")
     maxGame = 3
     currGame = 0
 
@@ -145,30 +147,30 @@ def InfoGet(userName,region, gameCount):
     for k in win_against.keys():
         if currGame >= maxGame:
             break 
-        print(f"    {k} : {win_against[k]}", end="")
+        #print(f"    {k} : {win_against[k]}", end="")
         currGame += 1
-    print()    
+    #print()    
 
-    print("Top 3 lose against:")
+    #print("Top 3 lose against:")
     currGame = 0
     lose_against = {k:v for k, v in reversed(sorted(lose_against.items(),key=lambda item: item[1]))}
     for k in lose_against.keys():
         if currGame >= maxGame:
             break
-        print(f"    {k} : {lose_against[k]}", end="")
+        #print(f"    {k} : {lose_against[k]}", end="")
         currGame += 1
-    print()
+    #print()
     
-    print("Top Bans")
+    #print("Top Bans")
     currGame = 0
     commonBans = {k:v for k, v in reversed(sorted(commonBans.items(),key=lambda item: item[1]))}
     #print(commonBans)
     for k in commonBans.keys():
         if currGame >= maxGame:
             break
-        print(f"    {k} : {commonBans[k]}", end="")
+        #print(f"    {k} : {commonBans[k]}", end="")
         currGame += 1
-    print()
+    #print()
     
     winPercentage = recent_win / gameCount
     playerSummary = {"playerName" : player_name, 
@@ -180,7 +182,8 @@ def InfoGet(userName,region, gameCount):
                      "loseAgainst" : lose_against,
                      "commonBans" : commonBans,
                      "matchHistory" : matchHistory,
-                     "gameCount" : gameCount 
+                     "gameCount" : gameCount, 
+                     "comment" : ""
                      }
 
     playerSummary["comment"] = generateComment(playerSummary=playerSummary)
@@ -192,7 +195,7 @@ def generateComment(playerSummary):
     
     comment = comment + playerSummary["playerName"] + " is doing"
     
-    performance = [(0.25,"terrible","only"), (0.45, "poorly","only"), (0.50,"fine",""), (0.55, "well","a whopping amount of"), (1.00,"fantastic")]
+    performance = [(0.25,"terrible","only"), (0.45, "poorly","only"), (0.50,"fine",""), (0.55, "well","a whopping amount of"), (1.00,"fantastic","a unimaginable")]
     for i in range(len(performance)):
         #print(playerSummary["winPercentage"])
         if (playerSummary["winPercentage"] < performance[i][0]):
@@ -205,18 +208,18 @@ def generateComment(playerSummary):
             comment = comment + " His greatest enemy is "
             
             for k in playerSummary["loseAgainst"].keys():
-                comment = comment + k + " losing to it " + str(playerSummary["loseAgainst"][k]) + " times. So avoid talking about the strength of that champion."
+                comment = comment + k + ", losing to it " + str(playerSummary["loseAgainst"][k]) + " times. So avoid talking about the strength of that champion."
                 break
             
             for k in playerSummary["winAgainst"].keys():
-                comment = comment + " He is doing well against " + k + " beating it " + str(playerSummary["winAgainst"][k]) + " times. "
+                comment = comment + " He is doing well against " + k + ", beating it " + str(playerSummary["winAgainst"][k]) + " times. "
                 break
             break
     
 
     
-    print(comment)
+    #print(comment)
     return comment
 
-x = InfoGet("Hide on bush","KR",10)
+#x = InfoGet("Hide on bush","KR",10)
 #print(x)

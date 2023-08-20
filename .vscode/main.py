@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPalette, QColor, QFont, QPixmap
 from PyQt5.QtCore import QBasicTimer
 from pathlib import Path
+from getInfo import InfoGet
 
 class MyGUI(QMainWindow):
     def __init__(self):
@@ -29,7 +30,18 @@ class MyGUI(QMainWindow):
         # Optional, resize label to image size
         self.label.resize(self.pixmap.width(),
                           self.pixmap.height())
+        
+        
         self.label.move(300,0)       
+        
+        self.players = []
+        
+        self.pastResult = QLabel(self)
+        self.pastResult.setFont(QFont("Bodoni MT",14))
+        self.pastResult.setText("Past Result:")
+        self.pastResult.move(10,325)
+        self.pastResult.adjustSize()
+        
         
         self.enterSumm.returnPressed.connect(self.searchSumm)
         self.go.clicked.connect(self.searchSumm)
@@ -54,7 +66,8 @@ class MyGUI(QMainWindow):
 
     def searchSumm(self):
         summText = self.enterSumm.text()
-        region = self.enterReg.currentText()
+        region = self.enterReg.currentText()            
+        
         if summText == "":
             message = QMessageBox()
             message.setWindowTitle("Invalid operation")
@@ -63,8 +76,31 @@ class MyGUI(QMainWindow):
         else:
             print('Summoner name: ' + summText)
             print('Region: ' + region)
-            self.pbar.show()
+                self.pbar.show()
             self.timer.start(100, self)
+        
+            
+            playerSummary = InfoGet(summText,region,10)
+            
+            if playerSummary == "User Not Found":
+                self.enterSumm.clear()
+                pass
+            
+            elif playerSummary not in self.players:
+                playerInfo = QLabel(self)
+                print("hi")
+                playerInfo.setWordWrap(True)
+                playerInfo.move(40,360+(130*(len(self.players)%3)))
+                playerInfo.setFixedWidth(900)
+                playerInfo.setFont(QFont("Bodoni MT",10))
+                playerInfo.setText(f"{len(self.players) %3 + 1}. Summoner Name: {playerSummary['playerName']} | Win%: {playerSummary['winPercentage'] * 100}% | W/L : {playerSummary['recentWin']} / {playerSummary['recentLose']} \nComment: {playerSummary['comment']}")
+                playerInfo.adjustSize()
+                self.players.append(playerSummary)
+                playerInfo.show()
+                self.enterSumm.clear()
+                  
+
+            
         
 def main():
     app = QApplication([])
