@@ -2,7 +2,7 @@ import sys
 import os
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon, QPalette, QColor, QFont, QPixmap
+from PyQt5.QtGui import QIcon, QFont, QPixmap
 from PyQt5.QtCore import QBasicTimer
 from pathlib import Path
 from getInfo import InfoGet
@@ -30,11 +30,10 @@ class MyGUI(QMainWindow):
         # Optional, resize label to image size
         self.label.resize(self.pixmap.width(),
                           self.pixmap.height())
-        
-        
         self.label.move(300,0)       
         
         self.players = []
+        self.enterSumm.setFocus()
         
         self.pastResult = QLabel(self)
         self.pastResult.setFont(QFont("Bodoni MT",14))
@@ -57,14 +56,17 @@ class MyGUI(QMainWindow):
         
         self.show()
 
+
     def timerEvent(self, e):
 
         if self.step >= 100:
             self.timer.stop()
+            self.step = 0
             return
 
         self.step = self.step + 1
         self.pbar.setValue(self.step)
+
 
     def searchSumm(self):
         summText = self.enterSumm.text()
@@ -81,7 +83,6 @@ class MyGUI(QMainWindow):
             self.pbar.show()
             self.timer.start(100, self)
         
-            
             playerSummary = InfoGet(summText,region,10)
             
             if playerSummary == "User Not Found":
@@ -111,7 +112,7 @@ class MyGUI(QMainWindow):
                 
                 playerInfo.show()
                 self.enterSumm.clear()
-                  
+
 
     def getPast(self):
         f = open(Path("pastHistory.txt"),"r")
@@ -122,7 +123,6 @@ class MyGUI(QMainWindow):
             lines+= 1
             
             if lines == 1:
-                self.players.append(x)     
                 s = s + x       
             
             elif lines == 2:
@@ -138,7 +138,8 @@ class MyGUI(QMainWindow):
                 playerInfo.setText(s)
                 playerInfo.adjustSize()
                 playerInfo.setStyleSheet("border : 1px solid black;")                
-                playerInfo.show() 
+                playerInfo.show()
+                self.players.append(x)     
                 s = ""
                 num += 1       
             
