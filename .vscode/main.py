@@ -35,6 +35,12 @@ class MyGUI(QMainWindow):
         
         self.players = []
         
+        self.pastResult = QLabel(self)
+        self.pastResult.setFont(QFont("Bodoni MT",14))
+        self.pastResult.setText("Past Result:")
+        self.pastResult.move(10,325)
+        self.pastResult.adjustSize()
+        
         self.show()
         self.enterSumm.returnPressed.connect(self.searchSumm)
         self.go.clicked.connect(self.searchSumm)
@@ -52,15 +58,21 @@ class MyGUI(QMainWindow):
             print('Summoner name: ' + summText)
             print('Region: ' + region)
             
+            
             playerSummary = InfoGet(summText,region,10)
-            if playerSummary not in self.players:
+            
+            if playerSummary == "User Not Found":
+                self.enterSumm.clear()
+                pass
+            
+            elif playerSummary not in self.players:
                 playerInfo = QLabel(self)
                 print("hi")
                 playerInfo.setWordWrap(True)
-                playerInfo.move(40,340+(125*(len(self.players)%3)))
+                playerInfo.move(40,360+(130*(len(self.players)%3)))
                 playerInfo.setFixedWidth(900)
                 playerInfo.setFont(QFont("Bodoni MT",10))
-                playerInfo.setText(f"Summoner Name: {playerSummary['playerName']} | Win%: {playerSummary['winPercentage'] * 100}% | W/L : {playerSummary['recentWin']} / {playerSummary['recentLose']} \nComment: {playerSummary['comment']}")
+                playerInfo.setText(f"{len(self.players) %3 + 1}. Summoner Name: {playerSummary['playerName']} | Win%: {playerSummary['winPercentage'] * 100}% | W/L : {playerSummary['recentWin']} / {playerSummary['recentLose']} \nComment: {playerSummary['comment']}")
                 playerInfo.adjustSize()
                 self.players.append(playerSummary)
                 playerInfo.show()
