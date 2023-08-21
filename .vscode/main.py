@@ -94,7 +94,7 @@ class MyGUI(QMainWindow):
                 self.displayInfo(playerSummary)
                 
                 f = open(Path("pastHistory.txt"),"a")
-                f.write(f"{summText} {region} \n")
+                f.write(f"{summText}|{region} \n")
                 
                 if(len(self.players) > 6):
                     self.players.pop(0)
@@ -125,7 +125,7 @@ class MyGUI(QMainWindow):
     def getPast(self):
         f = open(Path("pastHistory.txt"),"r")
         for x in f.readlines()[-3:]:
-            sName, sRegion = x.split(" ")[0], x.split(" ")[1]
+            sName, sRegion = x.split("|")[0].strip(), x.split("|")[1].strip()
             playerSum = InfoGet(sName,sRegion,10)
             self.displayInfo(playerSum)
             
