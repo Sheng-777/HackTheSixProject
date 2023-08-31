@@ -75,8 +75,8 @@ class MyGUI(QMainWindow):
             message.setText("Please enter a Summoner name")
             message.exec_()
         else:
-            #print('Summoner name: ' + summText) <-- to check if program works
-            #print('Region: ' + region)
+            print('Summoner name: ' + summText) #<-- to check if program works
+            print('Region: ' + region)
             self.pbar.show()
             self.timer.start(100, self)
         
@@ -88,7 +88,7 @@ class MyGUI(QMainWindow):
             
             elif playerSummary not in self.players[-3:]:
                 playerInfo = QLabel(self)
-                #print("hi")
+                print("hi")
                 playerInfo.setWordWrap(True)
                 playerInfo.move(40,360+(130*(len(self.players)%3)))
                 playerInfo.setFixedWidth(900)
