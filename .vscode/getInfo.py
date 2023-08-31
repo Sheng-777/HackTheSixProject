@@ -93,7 +93,10 @@ def InfoGet(userName,region, gameCount):
             
             if summonerName == player_name:
                 
-                totalKDA += (kills + assists) / deaths
+                if deaths == 0:
+                    totalKDA += (kills + assists) / (deaths+1)
+                else:
+                    totalKDA += (kills + assists) / (deaths+1)
                 
                 if win:
                     recent_win += 1
@@ -130,12 +133,12 @@ def InfoGet(userName,region, gameCount):
                     commonBans[getChamp(matchInfo["info"]["teams"][i//5]["bans"][i % 5]["championId"])] += 1
                 except:
                     pass
-            #print(f"    summoner name: {summonerName} | champions: {champion} | kills: {kills} | deaths: {deaths} | assists: {assists} | cs/m: {csPerMinute}| win: {win}")
+            print(f"    summoner name: {summonerName} | champions: {champion} | kills: {kills} | deaths: {deaths} | assists: {assists} | cs/m: {csPerMinute}| win: {win}")
         
         
         #break
         matchHistory.append(matchDetail)
-        #print("--------------------------------")
+        print("--------------------------------")
 
     #print(f"{userName} Summary:")
     #print(f"recent streak: {streak}")
