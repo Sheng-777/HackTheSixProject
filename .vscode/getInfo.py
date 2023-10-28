@@ -8,7 +8,7 @@ from championInfo import getChamp
 
 api_key = "RGAPI-76859c66-d7b4-4559-9cd8-054fab1a482e"
 regionTranslate = {"NA":["na1", "americas"], "EUW":["euw1","europe"], "EUNE" : ["eun1", "europe"], "KR":["kr", "asia"],"OCE":["oc1","sea"]}
-
+x = 0
 
 def InfoGet(userName,region, gameCount):
     # Get player Info
